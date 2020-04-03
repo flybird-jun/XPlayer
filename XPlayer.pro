@@ -18,18 +18,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    movie/MovieWidget.cpp
-
+    movie/src/MovieWidget.cpp \
+    movie/src/DecodeThread.cpp \
+    movie/src/VideoThread.cpp \
+    movie/src/AudioThread.cpp \
+    movie/src/AVInfo.cpp
 HEADERS += \
     mainwindow.h \
     MacroDefine.h \
-    movie/MovieWidget.h
-
+    movie/inc/AVInfo.h \
+    movie/inc/AudioThread.h \
+    movie/inc/DecodeThread.h \
+    movie/inc/MovieWidget.h \
+    movie/inc/VideoThread.h
 FORMS += \
     mainwindow.ui
 
 INCLUDEPATH += \
     ffmpeg/include  \
+    movie/inc
    # frame
 
 TRANSLATIONS += \

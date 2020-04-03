@@ -2,7 +2,7 @@
 
 #include <QMainWindow>
 #include <QTreeWidget>
-#include "movie/MovieWidget.h"
+#include "MovieWidget.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

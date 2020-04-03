@@ -4,6 +4,7 @@
 #include <QtDebug>
 #include "MacroDefine.h"
 #include <QPushButton>
+#include <DecodeThread.h>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -31,6 +32,9 @@ void MainWindow::CreateMenuBar()
               {
                  QString file_name=QFileDialog::getOpenFileName(this,tr("选择视频"), ".", tr("视频(*.avi *.mp4 *.flv)"));
                  QTreeWidgetItem *item = new QTreeWidgetItem(file_list,QStringList(file_name));
+                 DecodeThread * movieThread = new DecodeThread();
+                 movieThread->OpenFile(file_name.toStdString().c_str());
+                 movieThread->start();
               }
             );
     connect(dir,&QAction::triggered,this,[=](bool checked)
