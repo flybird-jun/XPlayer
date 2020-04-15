@@ -1,9 +1,8 @@
 _Pragma("once")
 #include"AVInfo.h"
-class VideoThread:public QThread
+class VideoThread:public QObject
 {
 Q_OBJECT
-public:
-    void run() override;
-    void StartDecodePacket(AVInfo *info);
+public slots:
+    void StartDecodePacketSlot(AVInfo *info);
 };

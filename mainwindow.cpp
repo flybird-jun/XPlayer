@@ -5,18 +5,25 @@
 #include "MacroDefine.h"
 #include <QPushButton>
 #include <DecodeThread.h>
+#include "BtnObj/inc/Pause.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     resize(MAIN_WINDOW_W,MAIN_WINDOW_H);
+    CreateMovieWidget();
     CreateMenuBar();
     CreateFileTree();
     CreateButtonWidget();
+
    // connect(bar)
 }
-
+void MainWindow::CreateMovieWidget()
+{
+    movie_widget = new MovieWidget(this);
+    movie_widget->setGeometry(VIDEO_WIDGET_X,VIDEO_WIDGET_Y,VIDEO_WIDGET_W,VIDEO_WIDGET_H);
+}
 
 void MainWindow::CreateMenuBar()
 {
@@ -28,13 +35,23 @@ void MainWindow::CreateMenuBar()
     open->addAction(file);
     open->addAction(dir);
     bar->addMenu(open);
+    /*******test*******/
+
+    DecodeThread * movieThread = new DecodeThread();
+    connect(movieThread,&DecodeThread::SendAVinfoSignal,movie_widget,&MovieWidget::GetAVinfoSlots);
+    movieThread->OpenFile("./5.avi");
+    movieThread->start();
+    /*******************************/
+    /*
     connect(file,&QAction::triggered,this,[=](bool checked)
               {
                  QString file_name=QFileDialog::getOpenFileName(this,tr("选择视频"), ".", tr("视频(*.avi *.mp4 *.flv)"));
                  QTreeWidgetItem *item = new QTreeWidgetItem(file_list,QStringList(file_name));
                  DecodeThread * movieThread = new DecodeThread();
+                 connect(movieThread,&DecodeThread::SendAVinfoSignal,movie_widget,&MovieWidget::GetAVinfoSlots);
                  movieThread->OpenFile(file_name.toStdString().c_str());
                  movieThread->start();
+
               }
             );
     connect(dir,&QAction::triggered,this,[=](bool checked)
@@ -64,7 +81,7 @@ void MainWindow::CreateMenuBar()
                     }
                 }
               }
-            );
+            );*/
 }
 void MainWindow::CreateFileTree()
 {
@@ -87,6 +104,11 @@ void MainWindow::CreateButtonWidget()
         btn[i]->resize(BUTTON_W,BUTTON_H);
         btn[i]->move(BUTTON_START_X+BUTTON_W*i+BUTTON_GAP,BUTTON_START_Y);
     }
+    connect(btn[1],&QPushButton::clicked,movie_widget,[=]
+    {
+        BtnObj *obj = new PauseBtn();
+        obj->DoAction(movie_widget);
+    });
   //  connect(btn[3],&QPushButton::clicked,)
 }
 MainWindow::~MainWindow()

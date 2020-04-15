@@ -9,7 +9,7 @@ _Pragma("once")
 #define VIDEO_WIDGET_W MAIN_WINDOW_W-TREE_WIDGET_W
 #define VIDEO_WIDGET_H 480
 #define VIDEO_WIDGET_X TREE_WIDGET_W
-#define VIDE_OWIDGET_Y MENU_BAR_H
+#define VIDEO_WIDGET_Y MENU_BAR_H
 #define BUTTON_WIDGET_X TREE_WIDGET_W
 #define BUTTON_WIDGET_Y MENU_BAR_H+VIDEO_WIDGET_H
 #define BUTTON_WIDGET_W  VIDEO_WIDGET_W
@@ -19,4 +19,4 @@ _Pragma("once")
 #define BUTTON_START_X 20
 #define BUTTON_GAP 10
 #define BUTTON_START_Y 10
-
+#define Tr(x)   QString(x).toStdString().c_str()

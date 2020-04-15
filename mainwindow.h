@@ -18,10 +18,11 @@ private:
     void CreateMenuBar();
     void CreateFileTree();
     void CreateButtonWidget();
+    void CreateMovieWidget();
 private:
     Ui::MainWindow *ui;
     QMenuBar *bar;
     QTreeWidget *file_list;
     QWidget *button_widget;
-    QWidget *movie_widget;
+    MovieWidget *movie_widget;
 };

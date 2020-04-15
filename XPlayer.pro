@@ -2,7 +2,7 @@ QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++11 console
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -31,6 +31,14 @@ HEADERS += \
     movie/inc/DecodeThread.h \
     movie/inc/MovieWidget.h \
     movie/inc/VideoThread.h
+
+SOURCES += \
+    BtnObj/src/BtnObj.cpp
+HEADERS += \
+    BtnObj/inc/BtnObj.h \
+    BtnObj/inc/Continue.h \
+    BtnObj/inc/Pause.h
+
 FORMS += \
     mainwindow.ui
 
