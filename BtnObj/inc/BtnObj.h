@@ -6,5 +6,6 @@ class BtnObj
 {
 public:
    virtual void DoAction(MovieWidget *w) = 0;
+    virtual ~BtnObj(){}
 };
 #endif

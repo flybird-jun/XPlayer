@@ -14,7 +14,8 @@ public:
 signals:
     void SendAVinfoSignal(AVInfo *);
     void StartVideoDecodeSingal(AVInfo *);
-    void EndVideoDecodeSignal();
+    void AVCurrentTime();
+    //void EndVideoDecodeSignal();
 private:
      AVFormatContext    *pFormatCtx;
      //AVStream *audio_stream,*video_stream;

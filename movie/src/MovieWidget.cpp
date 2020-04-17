@@ -4,14 +4,58 @@
 #include <QPainter>
 #include <QtDebug>
 #include <QTime>
+#include <QDir>
+#include "AVStreamSeperate.h"
 MovieWidget::MovieWidget(QWidget *parent):QWidget(parent)
 {
 
 }
 MovieWidget::~MovieWidget()
 {
-
+    if(movieThread)
+    {
+        movieThread->terminate();
+        movieThread->wait();
+        delete movieThread;
+    }
 }
+/******************************************************************************************/
+/*
+ * 供mainwindow调用接口
+*/
+void MovieWidget::OpenAV(char *path)
+{
+    if(path==nullptr)
+    {
+        return;
+    }
+    if(movieThread)
+    {
+        movieThread->terminate();
+        movieThread->wait();
+    }
+
+    file_path=path;
+    //QStringList str = filePath.split("/");
+    QRegExp reg("(.*[\\\\])(.*)\\.([^\\.]*)");
+    reg.indexIn(file_path);
+    qDebug()<<"path:"<<path;
+    file_dir = reg.cap(1);
+    file_name = reg.cap(2);
+    file_suffix = reg.cap(3);
+    qDebug()<<"file dir:"<<file_dir.toStdString().c_str();
+    qDebug()<<"file name:"<<file_name;
+    qDebug()<<"file suffix"<<file_suffix;
+/*
+    movieThread = new DecodeThread();
+    connect(movieThread,&DecodeThread::SendAVinfoSignal,this,&MovieWidget::GetAVinfoSlots);
+    movieThread->OpenFile(path);
+    movieThread->start();*/
+}
+/******************************************************************************************/
+/*
+ * 视频解码相关
+*/
 void MovieWidget::paintEvent(QPaintEvent*event)
 {
     QPainter painter(this);
@@ -81,6 +125,11 @@ void MovieWidget::GetPicture()
 }
 /*************************************************************************************************************/
 /*
+ * 辅助函数
+*/
+
+/*************************************************************************************************************/
+/*
  * 处理按键的函数
 */
 void MovieWidget::Pause()
@@ -90,4 +139,25 @@ void MovieWidget::Pause()
     {
          GetPicture();
     }
+}
+void MovieWidget::SeparateAVCodeStream()
+{
+    QDir dir(file_dir);
+    if(!dir.exists(file_name))
+    {
+        dir.mkpath(file_name);
+    }
+    dir.cd(file_name);
+    QString AVCodeStreamDir = dir.path();
+    QString audioFile = AVCodeStreamDir+"/"+file_name+".aac";
+    QString videoFile = AVCodeStreamDir+"/"+file_name+".h264";
+    qDebug()<<"file_path"<<file_path;
+    qDebug()<<"file_path str"<<file_path.toStdString().c_str();
+
+    AVStreamSeperate *sthread = new AVStreamSeperate(file_path.toStdString().c_str(),
+                                                     const_cast<char *>(audioFile.toStdString().c_str()),
+                                                     const_cast<char *>(videoFile.toStdString().c_str()));
+    sthread->start();
+    //sthread->run();
+
 }

@@ -36,6 +36,12 @@ public:
 
 };
 
+class AVTime
+{
+public:
+    double curTime;
+    double TotalTime;
+};
 
 class AVInfo
 {
@@ -47,6 +53,7 @@ public:
     Queue<AVPacket>videoq;
     Queue<AVPacket>audioq;
     Queue<Picture>pictureq;
+
    // unsigned char* audio_buf;
    // unsigned int audio_buf_size;
     template<class T>

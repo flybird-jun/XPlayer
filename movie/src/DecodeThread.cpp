@@ -1,5 +1,4 @@
 #include "DecodeThread.h"
-
 #include <QtDebug>
 DecodeThread::DecodeThread()
 {
@@ -13,11 +12,12 @@ DecodeThread::DecodeThread()
 }
 void DecodeThread::run()
 {
+    av_register_all();
     DecodeVideo();
 }
 void DecodeThread::OpenFile(const char *filepath)
 {
-   // memset(av_info,0,sizeof(AVInfo));
+
     pFormatCtx = avformat_alloc_context();
     av_info->AvFormatCtx = pFormatCtx;
     if (avformat_open_input(&pFormatCtx, filepath, NULL, NULL) != 0)
@@ -83,7 +83,7 @@ void DecodeThread::DecodeVideo()
         if(packet->stream_index==audio_index)
         {
          //  av_info->PutQueueNode(av_info->audioq,pkt);
-            av_packet_unref(packet);
+
         }
         else if(packet->stream_index==video_index)
         {
@@ -91,6 +91,7 @@ void DecodeThread::DecodeVideo()
            av_info->PutQueueNode(av_info->videoq,pkt);
         }
     }
+    //emit EndVideoDecodeSignal();
 }
 DecodeThread::~DecodeThread()
 {

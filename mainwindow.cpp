@@ -4,8 +4,8 @@
 #include <QtDebug>
 #include "MacroDefine.h"
 #include <QPushButton>
-#include <DecodeThread.h>
 #include "BtnObj/inc/Pause.h"
+#include "BtnObj/inc/AVSeparateBtn.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -23,6 +23,7 @@ void MainWindow::CreateMovieWidget()
 {
     movie_widget = new MovieWidget(this);
     movie_widget->setGeometry(VIDEO_WIDGET_X,VIDEO_WIDGET_Y,VIDEO_WIDGET_W,VIDEO_WIDGET_H);
+    movie_widget->OpenAV("C:\\Users\\Administrator\\Desktop\\XPlayer\\out\\5.avi");
 }
 
 void MainWindow::CreateMenuBar()
@@ -35,12 +36,7 @@ void MainWindow::CreateMenuBar()
     open->addAction(file);
     open->addAction(dir);
     bar->addMenu(open);
-    /*******test*******/
 
-    DecodeThread * movieThread = new DecodeThread();
-    connect(movieThread,&DecodeThread::SendAVinfoSignal,movie_widget,&MovieWidget::GetAVinfoSlots);
-    movieThread->OpenFile("./5.avi");
-    movieThread->start();
     /*******************************/
     /*
     connect(file,&QAction::triggered,this,[=](bool checked)
@@ -95,7 +91,7 @@ void MainWindow::CreateButtonWidget()
     button_widget = new QWidget(this);
     qDebug()<<BUTTON_WIDGET_X<<" "<<BUTTON_WIDGET_Y<<" "<<BUTTON_WIDGET_W<<" "<<BUTTON_WIDGET_H;
     button_widget->setGeometry(BUTTON_WIDGET_X,BUTTON_WIDGET_Y,BUTTON_WIDGET_W,BUTTON_WIDGET_H);
-    QString btn_text[BTN_NUM]={tr("上一个"),tr("暂停/播放"),tr("下一个"),tr("测试")};
+    QString btn_text[BTN_NUM]={tr("上一个"),tr("暂停/播放"),tr("下一个"),tr("视音频分离")};
     QPushButton * btn[BTN_NUM];
     for(int i=0;i<BTN_NUM;i++)
     {
@@ -104,12 +100,20 @@ void MainWindow::CreateButtonWidget()
         btn[i]->resize(BUTTON_W,BUTTON_H);
         btn[i]->move(BUTTON_START_X+BUTTON_W*i+BUTTON_GAP,BUTTON_START_Y);
     }
-    connect(btn[1],&QPushButton::clicked,movie_widget,[=]
-    {
-        BtnObj *obj = new PauseBtn();
-        obj->DoAction(movie_widget);
-    });
-  //  connect(btn[3],&QPushButton::clicked,)
+    connect(btn[1],&QPushButton::clicked,this,[=]
+        {
+            BtnObj *obj = new PauseBtn();
+            obj->DoAction(movie_widget);
+            delete obj;
+        }
+    );
+    connect(btn[3],&QPushButton::clicked,this,[=]
+        {
+            BtnObj *obj = new AVSeparateBtn();
+            obj->DoAction(movie_widget);
+            delete obj;
+        }
+    );
 }
 MainWindow::~MainWindow()
 {
